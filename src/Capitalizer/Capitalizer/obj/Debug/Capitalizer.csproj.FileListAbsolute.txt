@@ -1,0 +1,5 @@
+c:\users\sochoa\documents\visual studio 2015\Projects\Capitalizer\Capitalizer\bin\Debug\Capitalizer.dll
+c:\users\sochoa\documents\visual studio 2015\Projects\Capitalizer\Capitalizer\bin\Debug\Capitalizer.pdb
+c:\users\sochoa\documents\visual studio 2015\Projects\Capitalizer\Capitalizer\obj\Debug\Capitalizer.csprojResolveAssemblyReference.cache
+c:\users\sochoa\documents\visual studio 2015\Projects\Capitalizer\Capitalizer\obj\Debug\Capitalizer.dll
+c:\users\sochoa\documents\visual studio 2015\Projects\Capitalizer\Capitalizer\obj\Debug\Capitalizer.pdb
