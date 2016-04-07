@@ -1,4 +1,5 @@
-# Capitalizer
+Capitalizer
+-------------
 
 ## Library to convert :
 
