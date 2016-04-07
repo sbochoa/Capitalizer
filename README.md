@@ -1,10 +1,7 @@
-Capitalizer
--------------
+# Capitalizer
 
-## Library to convert :
+Capitalization Styles Converter :
 
-Camel Case -> Pascal Case
-Pascal Case -> Camel Case
-Text -> Pascal Case
-Text -> Camel Case
-
+ * Camel Case TO Pascal Case
+ ```c#
+	
