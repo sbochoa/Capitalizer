@@ -1,6 +1,6 @@
 # Capitalizer
 
-# Library to convert :
+## Library to convert :
 
 Camel Case -> Pascal Case
 Pascal Case -> Camel Case
