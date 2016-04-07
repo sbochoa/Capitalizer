@@ -52,5 +52,25 @@ namespace Capitalizer.Tests
 
             result.ShouldBe(expectedResult);
         }
+
+
+
+        [TestCase("_thisIsJustATest", "ThisIsJustATest")]
+        [TestCase("_test", "Test")]
+        public void FromCamelCaseToPascalCase_WithFromUnderscorePrefix_MadeCorrectly(string text, string expectedResult)
+        {
+            var result = text.FromCamelCase(Prefix.UnderScore).ToPascalCase();
+
+            result.ShouldBe(expectedResult);
+        }
+
+        [TestCase("_ThisIsJustATest", "thisIsJustATest")]
+        [TestCase("_Test", "test")]
+        public void FromPascalCaseToCamelCase_WithFromUnderscorePrefix_MadeCorrectly(string text, string expectedResult)
+        {
+            var result = text.FromPascalCase(Prefix.UnderScore).ToCamelCase();
+
+            result.ShouldBe(expectedResult);
+        }
     }
 }
