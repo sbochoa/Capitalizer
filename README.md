@@ -2,6 +2,12 @@
 
 Capitalization Styles Converter
 
+Add namespace :
+
+ ```c#
+	using Capitalizer;
+```
+
 Usage :
 
  * Camel Case TO Pascal Case
