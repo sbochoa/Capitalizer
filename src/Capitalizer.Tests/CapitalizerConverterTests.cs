@@ -8,67 +8,54 @@ namespace Capitalizer.Tests
     {
         [TestCase("thisIsJustATest", "ThisIsJustATest")]
         [TestCase("test", "Test")]
-        public void FromCamelCaseToPascalCase_WithoutPrefix_MadeCorrectly(string text, string expectedResult)
+        public void FromCamelCaseToPascalCase_WithoutTextPrefix_MadeCorrectly(string text, string expectedResult)
         {
-            var result = text.FromCamelCase().ToPascalCase();
+            var result = text.ToPascalCase();
 
             result.ShouldBe(expectedResult);
         }
 
         [TestCase("thisIsJustATest", "_ThisIsJustATest")]
         [TestCase("test", "_Test")]
-        public void FromCamelCaseToPascalCase_WithUnderscorePrefix_MadeCorrectly(string text, string expectedResult)
+        public void FromCamelCaseToPascalCase_WithResultUnderscorePrefix_MadeCorrectly(string text, string expectedResult)
         {
-            var result = text.FromCamelCase().ToPascalCase(Prefix.UnderScore);
+            var result = text.ToPascalCase(Prefix.None, Prefix.UnderScore);
 
             result.ShouldBe(expectedResult);
         }
 
         [TestCase("ThisIsJustATest", "thisIsJustATest")]
         [TestCase("Test", "test")]
-        public void FromPascalCaseToCamelCase_WithoutPrefix_MadeCorrectly(string text, string expectedResult)
+        public void FromPascalCaseToCamelCase_WithoutTextPrefix_MadeCorrectly(string text, string expectedResult)
         {
-            var result = text.FromPascalCase().ToCamelCase();
+            var result = text.ToCamelCase();
 
             result.ShouldBe(expectedResult);
         }
 
         [TestCase("ThisIsJustATest", "_thisIsJustATest")]
         [TestCase("Test", "_test")]
-        public void FromPascalCaseToCamelCase_WithUnderscorePrefix_MadeCorrectly(string text, string expectedResult)
+        public void FromPascalCaseToCamelCase_WithResultUnderscorePrefix_MadeCorrectly(string text, string expectedResult)
         {
-            var result = text.FromPascalCase().ToCamelCase(Prefix.UnderScore);
+            var result = text.ToCamelCase(Prefix.None, Prefix.UnderScore);
 
             result.ShouldBe(expectedResult);
         }
-
-        [TestCase("This is Just a Test", "thisIsJustATest", " ")]
-        [TestCase("This-is-Just-a-Test", "thisIsJustATest", "-")]
-        [TestCase("This*is*Just*a*Test", "thisIsJustATest", "*")]
-        [TestCase("Test working", "testWorking", " ")]
-        public void FromTextToCamelCase_WithCustomSeparatorWithoutPrefix_MadeCorrectly(string text, string expectedResult, string separator)
-        {
-            var result = text.FromText(separator).ToCamelCase();
-
-            result.ShouldBe(expectedResult);
-        }
-
-
 
         [TestCase("_thisIsJustATest", "ThisIsJustATest")]
         [TestCase("_test", "Test")]
-        public void FromCamelCaseToPascalCase_WithFromUnderscorePrefix_MadeCorrectly(string text, string expectedResult)
+        public void FromCamelCaseToPascalCase_WithTextUnderscorePrefix_MadeCorrectly(string text, string expectedResult)
         {
-            var result = text.FromCamelCase(Prefix.UnderScore).ToPascalCase();
+            var result = text.ToPascalCase(Prefix.UnderScore);
 
             result.ShouldBe(expectedResult);
         }
 
         [TestCase("_ThisIsJustATest", "thisIsJustATest")]
         [TestCase("_Test", "test")]
-        public void FromPascalCaseToCamelCase_WithFromUnderscorePrefix_MadeCorrectly(string text, string expectedResult)
+        public void FromPascalCaseToCamelCase_WithTextUnderscorePrefix_MadeCorrectly(string text, string expectedResult)
         {
-            var result = text.FromPascalCase(Prefix.UnderScore).ToCamelCase();
+            var result = text.ToCamelCase(Prefix.UnderScore);
 
             result.ShouldBe(expectedResult);
         }

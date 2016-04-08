@@ -1,82 +1,58 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Cryptography;
 using static System.Char;
 
 namespace Capitalizer
 {
-    public interface ICamelCaseConverter
+    public static class CapitalizationConverter
     {
-        string ToPascalCase(Prefix prefix = Prefix.None);
-    }
+        private static readonly string WhiteSpace = " ";
+        private static readonly string UnderScore = "_";
 
-    public interface IPascalCaseConverter
-    {
-        string ToCamelCase(Prefix prefix = Prefix.None);
-    }
-
-    public interface ITextCaseConverter
-        : ICamelCaseConverter, IPascalCaseConverter
-    { }
-
-    public class CapitalizationConverter
-        : ITextCaseConverter
-    {
-        private readonly string _text;
-        private readonly CapitalizationStyles _fromCapitalizationStyles;
-        private readonly Prefix _fromPrefix;
-        private readonly string _fromSeparator;
-
-        public CapitalizationConverter(string text, CapitalizationStyles fromCapitalizationStyles, Prefix fromPrefix, string fromSeparator = null)
+        public static string ToCamelCase(this string text, Prefix textPrefix = Prefix.None, Prefix resultPrefix = Prefix.None)
         {
-            _text = text;
-            _fromCapitalizationStyles = fromCapitalizationStyles;
-            _fromPrefix = fromPrefix;
-            _fromSeparator = fromSeparator;
+            return ToCapitalizationStyle(text, textPrefix, resultPrefix, (textTmp, textPrefixTmp, resultPrefixTmp) => ConcatText(textTmp, textPrefixTmp, resultPrefixTmp, ToLower));
         }
 
-        public string ToCamelCase(Prefix prefix = Prefix.None)
+        public static string ToPascalCase(this string text, Prefix textPrefix = Prefix.None, Prefix resultPrefix = Prefix.None)
         {
-            if (_fromCapitalizationStyles == CapitalizationStyles.Camel)
-            {
-                return _text;
-            }
-
-            if (_fromCapitalizationStyles == CapitalizationStyles.Pascal)
-            {
-                return ConcatText(_text, _fromPrefix, prefix, ToLower);
-            }
-
-            if (_fromCapitalizationStyles == CapitalizationStyles.Text)
-            {
-                var fullText = GetFullTextWithSeparator(_text, _fromSeparator, _fromPrefix);
-
-                return ConcatText(fullText, _fromPrefix, prefix, ToLower);
-            }
-
-            throw new InvalidOperationException(nameof(_fromCapitalizationStyles));
+            return ToCapitalizationStyle(text, textPrefix, resultPrefix, (textTmp, textPrefixTmp, resultPrefixTmp) => ConcatText(textTmp, textPrefixTmp, resultPrefixTmp, ToUpper));
         }
 
-        public string ToPascalCase(Prefix prefix = Prefix.None)
+        private static string ToCapitalizationStyle(string text, Prefix textPrefix, Prefix resultPrefix, Func<string, Prefix, Prefix, string> capitalizationStyleFunc)
         {
-            if (_fromCapitalizationStyles == CapitalizationStyles.Pascal)
+            var capitalizationStyle = GetCapitalizationStyle(text);
+
+            switch (capitalizationStyle)
             {
-                return _text;
+                case CapitalizationStyles.Text:
+                    var fullText = GetFullTextWithSeparator(text, WhiteSpace, textPrefix);
+                    return capitalizationStyleFunc(fullText, textPrefix, resultPrefix);
+                case CapitalizationStyles.Camel:
+                case CapitalizationStyles.None:
+                case CapitalizationStyles.Pascal:
+                    return capitalizationStyleFunc(text, textPrefix, resultPrefix);
             }
 
-            if (_fromCapitalizationStyles == CapitalizationStyles.Camel)
+            throw new InvalidOperationException(nameof(capitalizationStyle));
+        }
+
+        private static CapitalizationStyles GetCapitalizationStyle(string text)
+        {
+            if (text.Length <= 2)
             {
-                return ConcatText(_text, _fromPrefix, prefix, ToUpper);
+                return CapitalizationStyles.None;
             }
 
-            if (_fromCapitalizationStyles == CapitalizationStyles.Text)
-            {
-                var fullText = GetFullTextWithSeparator(_text, _fromSeparator, _fromPrefix);
+            var words = text.Split(new[] { ' ' }, StringSplitOptions.None | StringSplitOptions.RemoveEmptyEntries);
 
-                return ConcatText(fullText, _fromPrefix, prefix, ToUpper);
+            if (words.Length > 1)
+            {
+                return CapitalizationStyles.Text;
             }
 
-            throw new InvalidOperationException(nameof(_fromCapitalizationStyles));
+            return IsUpper(text[0]) ? CapitalizationStyles.Pascal : CapitalizationStyles.Camel;
+            
         }
 
         private static string GetFullTextWithSeparator(string text, string separator, Prefix fromPrefix)
@@ -88,7 +64,7 @@ namespace Capitalizer
         private static string ConcatText(string text, Prefix fromPrefix, Prefix prefix, Func<char, char> caseFunc)
         {
             return string.Concat
-                (prefix == Prefix.UnderScore ? "_" : string.Empty
+                (prefix == Prefix.UnderScore ? UnderScore : string.Empty
                     , fromPrefix == Prefix.UnderScore ? caseFunc(text[1]) : caseFunc(text[0])
                     , fromPrefix == Prefix.UnderScore
                         ? text.Substring(2, text.Length - 2)
